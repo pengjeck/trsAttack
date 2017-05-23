@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="electron.d.ts" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$USER_HOME$/scode/DefinitelyTyped/types/electron/index.d.ts" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$USER_HOME$/scode/DefinitelyTyped/types/electron/index.d.ts" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>
