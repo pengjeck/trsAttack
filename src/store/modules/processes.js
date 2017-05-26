@@ -4,10 +4,10 @@
 
 import echarts from 'echarts'
 import paintLines from '../../util/paint'
-import Json2SingleTraces from '../../util/singleTrace'
-const {dialog} = require('electron').remote
+// import Json2SingleTraces from '../../util/singleTrace'
+// const {dialog} = require('electron').remote
 // electron about
-import { ipcRenderer } from 'electron'
+// import { ipcRenderer } from 'electron'
 
 export default {
   namespace: true,
@@ -28,6 +28,7 @@ export default {
         methods: {
           rowTrace: {
             name: '原始曲线',
+            configModalShow: true,
             charts: {
               // 每个文件对应的charts
             }
@@ -41,10 +42,12 @@ export default {
         methods: {
           StaticAlignment: {
             name: '静态对齐',
+            configModalShow: false,
             charts: {}
           },
           FFT: {
             name: '快速傅里叶变换',
+            configModalShow: false,
             charts: {}
           },
           DTW: {
@@ -53,6 +56,8 @@ export default {
           },
           POC: {
             name: 'POC',
+            configModalShow: false,
+
             charts: {}
           }
         }
@@ -64,18 +69,22 @@ export default {
         methods: {
           DPA: {
             name: '差分',
+            configModalShow: false,
             charts: {}
           },
           CPA: {
             name: 'CPA',
+            configModalShow: false,
             charts: {}
           },
           MIA: {
             name: 'MIA',
+            configModalShow: false,
             charts: {}
           },
           TA: {
             name: 'TA',
+            configModalShow: false,
             charts: {}
           }
         }
@@ -145,7 +154,7 @@ export default {
      * @param params
      * @constructor
      */
-    Paint (state, params) {
+    PaintTarget (state, params) {
       let processName = params[0]
       let methodName = params[1]
       let target = params[2]
@@ -166,38 +175,38 @@ export default {
         throw e
       }
     },
-    /**
-     * 发送http请求
-     * @param methodName
-     */
-    processRequest (methodName) {
-      let data = ipcRenderer.sendSync('queryProcessData', {
-        processName: 'preProcess',
-        methodName: methodName,
-        filename: this.targetTraceHash
-      })
-      // yes I have found the data
-      if (data !== null) {
-        this.Paint(methodName, data)
-      } else {
-        // TODO: 填上url
-        this.$http.get().then(response => {
-          let data = response.body
-          let jsondata = JSON.parse(data)
-          // 处理之后的数据
-          let traces = Json2SingleTraces(jsondata)
-          this.Paint(methodName, traces)
-          // save to file
-          ipcRenderer.send('saveProcessData', {
-            processName: 'preProcess',
-            methodName: methodName,
-            filename: this.targetTraceHash + '.json',
-            traces: traces
-          })
-        }, response => {
-          dialog.showErrorBox('网络错误', '无法连接到服务器，请稍后. \n' + response)
-        })
+    PaintTraces (state, params) {
+      let processName = params[0]
+      let methodName = params[1]
+      let target = params[2]
+      // let config = params[3]
+      try {
+        if ((!state.processes[processName].methods[methodName].charts.hasOwnProperty(target.filename)) ||
+          state.processes[processName].methods[methodName].charts[target.filename] === null) {
+          let div = document.getElementById(
+            target.filename + '_' + processName + '_' + methodName
+          )
+          state.processes[processName].methods[methodName].charts[target.filename] = echarts.init(div)
+        }
+        paintLines(state.processes[processName].methods[methodName].charts[target.filename],
+          target.traces,
+          '', '',  // labelx, labely
+          1, 1, // scalex, scaley
+          methodName)
+      } catch (e) {
+        throw e
       }
+    },
+    /**
+     * 设置可见性
+     * @param state
+     * @param params
+     * @constructor
+     */
+    SetMethodConfigModalVisual (state, params) {
+      let processName = params[0]
+      let methodName = params[1]
+      state.processes[processName].methods[methodName].configModalShow = params[2]
     }
   },
   getters: {
@@ -265,6 +274,9 @@ export default {
       } else {
         throw new EvalError('you have wrong methodName')
       }
+    },
+    MethodConfigModalShow: (state, getters) => (processName, methodName) => {
+      return getters.Method(processName, methodName).configModalShow
     },
     /**
      * get processIndex

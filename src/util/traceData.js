@@ -178,6 +178,22 @@ export default class TraceData {
   }
 
   /**
+   * data中取出来的每条曲线的样本的数量
+   * @return {number}
+   */
+  GetInSampleNum = () => {
+    return this.sampleRange[1] - this.sampleRange[0]
+  }
+  /**
+   * data中取出来的曲线的数量
+   * @returns {number}
+   * @constructor
+   */
+  GetInTraceNum = () => {
+    return this.traceRange[1] - this.traceRange[0]
+  }
+
+  /**
    * 将该对象中很多的traces转换为json数组
    * @returns {Array}
    */

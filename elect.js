@@ -16,7 +16,7 @@ const url = 'http://localhost:8080'
 // let url = '/home/pj/pro/js/webapp/index.html'
 function createWindow () {
   mainWindow = new BrowserWindow({
-    icon: '/home/pj/pro/js/webapp/src/assets/logo.png'
+    icon: '/home/pj/pro/js/webapp/src/resource/logo.png'
   })
   mainWindow.loadURL(url)
   mainWindow.maximize()  // 最大化窗口

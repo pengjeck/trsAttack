@@ -76,9 +76,9 @@
 
 <script>
   import rowTracePanel from './rowTracePanel.vue'
-  import preProcessPanel from './preProcessPanel.vue'
-  import attackPanel from './attackPanel.vue'
-  import assessPanel from './assessPanel.vue'
+  import preProcessPanel from './preProcess/preProcessPanel.vue'
+  import attackPanel from './attack/attackPanel.vue'
+  import assessPanel from './assess/assessPanel.vue'
   import reportPanel from './reportPanel.vue'
   import Tabs from '../../node_modules/iview/src/components/tabs/tabs'
   import TabPane from '../../node_modules/iview/src/components/tabs/pane'

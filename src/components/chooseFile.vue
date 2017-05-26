@@ -44,8 +44,6 @@
 //  import TraceData from '../util/traceData'
 
   export default {
-    date: {
-    },
     methods: {
       /**
        * 选择文件类型
@@ -62,7 +60,6 @@
           } else {
             let filename = fileNames[0]
             let queryTarget = this.$store.getters.Target(filename)
-//            console.log(queryTarget)
             if (queryTarget.length !== 0) {
               this.$Modal.info({
                 title: '提示',

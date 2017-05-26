@@ -1,0 +1,108 @@
+<style>
+  .header4-text {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+  }
+</style>
+
+<template>
+  <Modal
+    v-model="StaticAlignmentModalVisual"
+    title="StaticAlignment配置"
+    @on-ok="confirm"
+    @on-cancel="abolish">
+    <row-number-input illustrate="偏移量"
+                      :inputNumberRange="targetSampleRange"
+                      ref="rangeOffset">
+    </row-number-input>
+    <row-number-input illustrate="起始点"
+                      :inputNumberRange="targetSampleRange"
+                      ref="startPoint">
+    </row-number-input>
+    <row-number-input illustrate="总点数"
+                      :inputNumberRange="targetSampleRange"
+                      ref="totalPoints">
+    </row-number-input>
+    <row-number-input illustrate="基准曲线"
+                      :inputNumberRange="targetTraceRange"
+                      ref="referTraceIndex">
+    </row-number-input>
+  </Modal>
+</template>
+
+<script>
+  import rowNumberInput from '../basic/rowNumberInput.vue'
+  let request = require('request')
+  import { HOST } from '../../util/localConfig'
+  const {dialog} = require('electron').remote
+  export default {
+    components: {
+      rowNumberInput
+    },
+    data () {
+      return {
+        preProcess: 'preProcess',
+        methodName: 'StaticAlignment'
+      }
+    },
+    computed: {
+      targetSampleRange: function () {
+        // 不是使用原来的数据，使用一个拷贝避免内部对数据进行修改
+        return [this.target.sampleRange[0], this.target.sampleRange[1]]
+      },
+      targetTraceRange: function () {
+        return [this.target.traceRange[0], this.target.traceRange[1]]
+      },
+      target: function () {
+        try {
+          return this.$store.getters.Target(this.$store.state.activeTabName)[0]
+        } catch (e) {
+          dialog.showErrorBox('error', '内部错误')
+        }
+      },
+      // 查找是否可见
+      StaticAlignmentModalVisual: function () {
+        return this.$store.getters.MethodConfigModalShow(this.preProcess, this.methodName)
+      }
+    },
+    methods: {
+      confirm: function () {
+        let data = {
+          RangeOffset: this.$refs.rangeOffset.getInputNumber(),
+          StartPoint: this.$refs.startPoint.getInputNumber(),
+          TotalPoints: this.$refs.totalPoints.getInputNumber(),
+          referTrace: this.target.traces[this.$refs.referTraceIndex.getInputNumber() - this.target.traceRange[0]],
+          traces: this.target.traces
+        }
+        let options = {
+          url: HOST,
+          method: 'POST',
+          form: data
+        }
+        let upperThis = this
+        request.post(options, function (error, response, body) {
+          if (!error && response.statusCode === 200) {
+            let content = JSON.parse(body)
+            // 对象复制
+            let targetForPaint = Object.assign({}, upperThis.target)
+            targetForPaint.traces = content.traces
+            upperThis.$store.commit('PaintTarget', [
+              'preProcess', 'StaticAlignment', targetForPaint
+            ])
+          } else {
+            dialog.showErrorBox('error',
+              '网络|服务器内部错误\n' + error + '\n' + response.statusCode)
+          }
+        })
+        this.$store.commit('SetMethodConfigModalVisual',
+          [this.preProcess, this.methodName, true])
+      },
+      abolish: function () {
+        this.$Message.info('处理已取消')
+        this.$store.commit('SetMethodConfigModalVisual',
+          [this.preProcess, this.methodName, false])
+      }
+    }
+  }
+</script>

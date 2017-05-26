@@ -11,7 +11,7 @@ module.exports = {
   entry: {
     app: './src/main.js'
   },
-  target: 'electron-renderer',
+  target: 'electron',
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

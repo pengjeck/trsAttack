@@ -12,7 +12,7 @@
   <Modal v-model="visual" :closable="false" :mask-closable="false">
     <p slot="header" style="color:gray;text-align:center;font-size:20px;">
       <Icon type="information-circled"></Icon>
-      <span>{{ selectTarget['filename'] }}</span>
+      <span>{{ selectedTarget['filename'] }}</span>
     </p>
 
     <!-- ---------------------- 配置内容 ---------------------- -->
@@ -20,7 +20,7 @@
       <Row>
         <i-col span="8">
           <span class="header4-text">
-            曲线选择(0-{{ selectTarget['traceNum'] - 1}}):
+            曲线选择(0-{{ selectedTarget['traceNum'] - 1}}):
           </span>
         </i-col>
         <i-col span="16">
@@ -31,7 +31,7 @@
           </Input-number>
           到
           <Input-number
-            :max="selectTarget['traceNum'] - 1"
+            :max="selectedTarget['traceNum'] - 1"
             :min="0"
             v-model="traceRange[1]">
           </Input-number>
@@ -42,7 +42,7 @@
       <Row>
         <i-col span="8">
           <span class="header4-text">
-            样本区间(0-{{ selectTarget['sampleNum'] - 1}}):
+            样本区间(0-{{ selectedTarget['sampleNum'] - 1}}):
           </span>
         </i-col>
         <i-col span="16">
@@ -53,7 +53,7 @@
           </Input-number>
           到
           <Input-number
-            :max="selectTarget['sampleNum'] - 1"
+            :max="selectedTarget['sampleNum'] - 1"
             :min="1"
             v-model="sampleRange[1]">
           </Input-number>
@@ -87,8 +87,9 @@
       InputNumber
     },
     computed: {
-      selectTarget: function () {
-        return this.$store.state.selectedTarget
+      selectedTarget: function () {
+//        console.log(this.$store.getters.selectedTarget)
+        return this.$store.getters.selectedTarget
       },
       visual: function () {
         return this.$store.state.selectModalVisual
@@ -115,14 +116,13 @@
         target.traceRange = this.traceRange
         target.sampleRange = this.sampleRange
         target.show = true
+        this.$store.state.activeTabName = target.filename
         this.$store.commit('PushTarget', target) // 提交，插入新的数据
         this.$nextTick(function () {
-          this.$store.commit('Paint', [
+          this.$store.commit('PaintTarget', [
             'rowTrace', 'rowTrace', target
           ])
-          this.$store.state.activeTabName = target.filename
         })
-
         this.$store.state.selectedTarget = new TraceData()
         this.$store.state.selectModalVisual = false
       }

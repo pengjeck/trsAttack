@@ -6,3 +6,5 @@
  * 一些客户端的配置
  */
 
+const HOST = 'http://localhost:9080'
+export { HOST }
