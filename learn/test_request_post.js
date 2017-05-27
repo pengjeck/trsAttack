@@ -6,6 +6,7 @@ const request = require('request')
 // let data = {
 //   fizz: 'buzz'
 // }
+const sample_str_target = require('./sample_str_target')
 let data1 = {
   Align: 'FFT',
   OriginalPoints: 8,
@@ -53,8 +54,8 @@ let pocUrl = 'http://localhost:5000/preProcess/alignment/POC'
 // console.log(JSON.stringify(data))
 // let url = 'http://httpbin.org/post'
 request.post({
-  url: pocUrl,
-  json: JSON.stringify(data4git st)
+  url: staticAlignmentUrl,
+  json: JSON.stringify(sample_str_target)
   // data: JSON.stringify(data)
 }, function (error, response, body) {
   if (!error && response.statusCode === 200) {

@@ -20,16 +20,17 @@ int main(int argc, char *argv[]){
 
   Json::Value in_root;
   Json::Value out_root;
-  out_root["Align"] = method_name;
+  out_root["align"] = method_name;
   vector<vector<double> > traces;
   if(reader.parse(body, in_root)){
-    if(!Basic::checkParams(in_root, vector<string>{"OriginalPoints", "traces"})){
+    if(!Basic::checkParams(in_root, vector<string>{"originalPoints", "traces"})){
       out_root["traces"].append(Json::Value());
+      out_root["message"].append("参数错误");
       cout << out_root.toStyledString() << endl;
       return 1;
     }
 
-    auto originalPoints = in_root["OriginalPoints"].asInt();
+    auto originalPoints = in_root["originalPoints"].asInt();
 
     traces = Basic::ReadTraces(in_root);
     auto iterator = traces.begin();
@@ -55,8 +56,9 @@ int main(int argc, char *argv[]){
     return 0;
   }else{
     out_root["traces"].append(Json::Value());
+    out_root["message"].append("内容解析错误");
     // 返回不支持的媒体类型
     cout << out_root.toStyledString() << endl;
-    return;
+    return 1;
   }
 }

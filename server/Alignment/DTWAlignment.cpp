@@ -23,16 +23,17 @@ int main(int argc, char *argv[]){
   out_root["Align"] = method_name;
   vector<vector<double> > traces;
   if(reader.parse(body, in_root)){
-    if(!Basic::checkParams(in_root, vector<string>{"refer_trace",
+    if(!Basic::checkParams(in_root, vector<string>{"referTrace",
                                                    "traces"})){
       out_root["traces"].append(Json::Value());
+      out_root["message"].append("参数错误");
       cout << out_root.toStyledString() << endl;
       return 1;
     }
     /**
      * 设置参数
      */
-    vector<double> refer_trace = Basic::ReadSingleTrace(in_root["refer_trace"]);
+    vector<double> refer_trace = Basic::ReadSingleTrace(in_root["referTrace"]);
 
     Parameter *p = new Parameter();
     p->Align = QString::fromStdString(method_name);
@@ -54,7 +55,7 @@ int main(int argc, char *argv[]){
     return 0;
   }else{
     out_root["traces"].append(Json::Value());
-
+    out_root["message"].append("内容解析错误");
     cout << out_root.toStyledString() << endl;
     // 返回不支持的媒体类型
     return 1;

@@ -1,6 +1,6 @@
 <style>
   .tab-pane-content {
-    height: 500px;
+    height: 700px;
     margin: 5px;
     width: 100%;
     overflow: hidden;
@@ -35,7 +35,9 @@
         <!-- >>>>>>>>>>> 页面内容 <<<<<<<<<<<< -->
         <Carousel
           @on-change="handleCarouselChange"
-          v-model="processIndex">
+          v-model="processIndex"
+          arrow="never"
+          dots="none">
           <!-- 原始曲线 -->
           <Carousel-item>
             <row-trace-panel

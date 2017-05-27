@@ -2,7 +2,9 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/Alignment/alignment_factory.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/alignment_factory.h" charset="GBK" />
     <file url="file://$PROJECT_DIR$/Alignment/alignment_method.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/complex.h" charset="GBK" />
     <file url="file://$PROJECT_DIR$/Alignment/complex.h" charset="GBK" />
     <file url="file://$PROJECT_DIR$/Alignment/dtw.cpp" charset="GBK" />
     <file url="file://$PROJECT_DIR$/Alignment/dtw.h" charset="GBK" />

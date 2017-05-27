@@ -3,7 +3,7 @@
  */
 
 import echarts from 'echarts'
-import paintLines from '../../util/paint'
+import {paintLines, paintTraces} from '../../util/paint'
 // import Json2SingleTraces from '../../util/singleTrace'
 // const {dialog} = require('electron').remote
 // electron about
@@ -40,7 +40,7 @@ export default {
         index: 1,
         iconType: 'funnel',
         methods: {
-          StaticAlignment: {
+          staticAlignment: {
             name: '静态对齐',
             configModalShow: false,
             charts: {}
@@ -157,7 +157,7 @@ export default {
     PaintTarget (state, params) {
       let processName = params[0]
       let methodName = params[1]
-      let target = params[2]
+      let target = params[2]  // a target
       try {
         if ((!state.processes[processName].methods[methodName].charts.hasOwnProperty(target.filename)) ||
           state.processes[processName].methods[methodName].charts[target.filename] === null) {
@@ -166,8 +166,8 @@ export default {
           )
           state.processes[processName].methods[methodName].charts[target.filename] = echarts.init(div)
         }
-        paintLines(state.processes[processName].methods[methodName].charts[target.filename],
-          target.traces,
+        paintTraces(state.processes[processName].methods[methodName].charts[target.filename], // chart
+          target.traces,   // traces
           target.labelX, target.labelY,
           target.scaleX, target.scaleY,
           methodName)
@@ -176,20 +176,42 @@ export default {
       }
     },
     PaintTraces (state, params) {
-      let processName = params[0]
-      let methodName = params[1]
-      let target = params[2]
-      // let config = params[3]
+      let filename = params[0]
+      let processName = params[1]
+      let methodName = params[2]
+      let traces = params[3] // singeTrace Object array
       try {
-        if ((!state.processes[processName].methods[methodName].charts.hasOwnProperty(target.filename)) ||
-          state.processes[processName].methods[methodName].charts[target.filename] === null) {
+        if ((!state.processes[processName].methods[methodName].charts.hasOwnProperty(filename)) ||
+          state.processes[processName].methods[methodName].charts[filename] === null) {
           let div = document.getElementById(
-            target.filename + '_' + processName + '_' + methodName
+            filename + '_' + processName + '_' + methodName
           )
-          state.processes[processName].methods[methodName].charts[target.filename] = echarts.init(div)
+          state.processes[processName].methods[methodName].charts[filename] = echarts.init(div)
         }
-        paintLines(state.processes[processName].methods[methodName].charts[target.filename],
-          target.traces,
+        paintTraces(state.processes[processName].methods[methodName].charts[filename],
+          traces,
+          '', '',  // labelx, labely
+          1, 1, // scalex, scaley
+          methodName)
+      } catch (e) {
+        throw e
+      }
+    },
+    PaintLines (state, params) {
+      let filename = params[0]   // 为了获取需要绘图的对象
+      let processName = params[1]
+      let methodName = params[2]
+      let lines = params[3] // (int/float) array array
+      try {
+        if ((!state.processes[processName].methods[methodName].charts.hasOwnProperty(filename)) ||
+          state.processes[processName].methods[methodName].charts[filename] === null) {
+          let div = document.getElementById(
+            filename + '_' + processName + '_' + methodName
+          )
+          state.processes[processName].methods[methodName].charts[filename] = echarts.init(div)
+        }
+        paintLines(state.processes[processName].methods[methodName].charts[filename],
+          lines,
           '', '',  // labelx, labely
           1, 1, // scalex, scaley
           methodName)

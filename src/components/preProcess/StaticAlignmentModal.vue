@@ -44,7 +44,7 @@
     data () {
       return {
         preProcess: 'preProcess',
-        methodName: 'StaticAlignment'
+        methodName: 'staticAlignment'
       }
     },
     computed: {
@@ -70,41 +70,41 @@
     methods: {
       confirm: function () {
         let data = {
-          RangeOffset: this.$refs.rangeOffset.getInputNumber(),
-          StartPoint: this.$refs.startPoint.getInputNumber(),
-          TotalPoints: this.$refs.totalPoints.getInputNumber(),
-          referTrace: this.target.traces[this.$refs.referTraceIndex.getInputNumber() - this.target.traceRange[0]],
-          traces: this.target.traces
+          rangeOffset: this.$refs.rangeOffset.getInputNumber(),
+          startPoint: this.$refs.startPoint.getInputNumber(),
+          totalPoints: this.$refs.totalPoints.getInputNumber(),
+          referTrace: this.target.traces[this.$refs.referTraceIndex.getInputNumber() - this.target.traceRange[0]].samples,
+          traces: this.target.traces.map(trace => trace.samples)
         }
         let url = urlAddSubPath(HOST, this.preProcess)
         url = urlAddSubPath(url, 'alignment')
         url = urlAddSubPath(url, this.methodName)
         let options = {
           url: url,
-//          method: 'POST',
-          json: true,
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify(data)
+          json: JSON.stringify(data)
         }
         let upperThis = this
-        request.post(options, function (error, response, body) {
-          if (!error && response.statusCode === 200) {
-            let content = JSON.parse(body)
-            // 对象复制
-            let targetForPaint = Object.assign({}, upperThis.target)
-            targetForPaint.traces = content.traces
-            upperThis.$store.commit('PaintTarget', [
-              'preProcess', 'StaticAlignment', targetForPaint
-            ])
-          } else {
-            dialog.showErrorBox('error',
-              '网络|服务器内部错误\n' + error + '\n' + response.statusCode)
-          }
-        })
+        request.post(options,
+          function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+              let content = JSON.parse(body)
+              // 对象复制
+//              let targetForPaint = Object.assign({}, upperThis.target)
+//              targetForPaint.traces = content.traces
+              upperThis.$store.commit('PaintLines', [
+                upperThis.target.filename,
+                upperThis.preProcess,
+                upperThis.methodName,
+                content.traces
+              ])
+            } else {
+              dialog.showErrorBox('error',
+                '网络|服务器内部错误\n' + error + '\n' + response.statusCode)
+            }
+          })
+
         this.$store.commit('SetMethodConfigModalVisual',
-          [this.preProcess, this.methodName, true])
+          [this.preProcess, this.methodName, false])
       },
       abolish: function () {
         this.$Message.info('处理已取消')

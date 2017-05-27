@@ -115,7 +115,7 @@ export function readHeader (path) {
           traceData.labelX = result
           break
         case 74:
-          traceData.labely = result
+          traceData.labelY = result
           break
         default:
           break

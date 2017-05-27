@@ -8,6 +8,7 @@
 #include <iostream>
 #include "staticalignment_method.h"
 #include "Basic.h"
+
 using namespace std;
 
 int main(int argc, char *argv[]){
@@ -17,26 +18,27 @@ int main(int argc, char *argv[]){
   Json::Reader reader;
   Json::Value in_root;
   Json::Value out_root;
-  out_root["Align"] = method_name;
+  out_root["align"] = method_name;
   vector<vector<double> > traces;
   auto parse_out = reader.parse(body, in_root);
   if(parse_out){
-    if(!Basic::checkParams(in_root, vector<string>{"RangeOffset",
-                                            "Start_Point",
-                                            "TotalPoints",
-                                            "refer_trace",
-                                            "traces"})){
+    if(!Basic::checkParams(in_root, vector<string>{"rangeOffset",
+                                                   "startPoint",
+                                                   "totalPoints",
+                                                   "referTrace",
+                                                   "traces"})){
       out_root["traces"].append(Json::Value());
-      cout << out_root.toStyledString() << endl;
+      out_root["message"].append("参数错误");
+      cout << out_root.toStyledString() << endl; // 输出
       return 1;
     }
     /**
      * 设置参数
      */
-    auto RangeOffset = in_root["RangeOffset"].asInt();
-    auto Start_Point = in_root["Start_Point"].asInt();
-    auto TotalPoints = in_root["TotalPoints"].asInt();
-    vector<double> refer_trace = Basic::ReadSingleTrace(in_root["refer_trace"]);
+    auto RangeOffset = in_root["rangeOffset"].asInt();
+    auto Start_Point = in_root["startPoint"].asInt();
+    auto TotalPoints = in_root["totalPoints"].asInt();
+    vector<double> refer_trace = Basic::ReadSingleTrace(in_root["referTrace"]);
 
     Parameter *p = new Parameter();
     p->Align = QString::fromStdString(method_name);
@@ -58,7 +60,7 @@ int main(int argc, char *argv[]){
     return 0;
   }else{
     out_root["traces"].append(Json::Value());
-    // 返回不支持的媒体类型
+    out_root["message"].append("内容解析失败");
     cout << out_root.toStyledString() << endl;
     return 1;
   }
