@@ -52,12 +52,12 @@ export default {
           },
           DTW: {
             name: 'DTW',
+            configModalShow: false,
             charts: {}
           },
           POC: {
             name: 'POC',
             configModalShow: false,
-
             charts: {}
           }
         }

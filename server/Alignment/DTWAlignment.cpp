@@ -38,9 +38,6 @@ int main(int argc, char *argv[]){
     Parameter *p = new Parameter();
     p->Align = QString::fromStdString(method_name);
     p->refer_trace = refer_trace;
-    /**
-     * 快速傅利叶变换
-     */
     auto method = new dtw(p);
     Json::Value single_trace;
 

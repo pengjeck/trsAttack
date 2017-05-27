@@ -112,7 +112,11 @@
         this.$store.state.selectModalVisual = false
       },
       selectConfirm () {
-        let target = readMultiTrace(this.$store.state.selectedTarget, this.traceRange[0], this.traceRange[1])
+        let target = readMultiTrace(this.$store.state.selectedTarget,
+          this.traceRange[0],
+          this.traceRange[1],
+          this.sampleRange[0],
+          this.sampleRange[1])
         target.traceRange = this.traceRange
         target.sampleRange = this.sampleRange
         target.show = true

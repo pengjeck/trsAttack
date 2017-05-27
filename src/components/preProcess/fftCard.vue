@@ -4,7 +4,7 @@
 
 <template>
   <div>
-    <Card>
+    <Card :style="{height: rowHeight + 'px'}">
       <div v-show="buttonVisible"
            style="text-align:center;">
         <Button type="ghost"
@@ -17,11 +17,16 @@
       </div>
       <div
         :id="filename + '_' + preProcess + '_' + methodName"
-        class="chart">
+        class="chart"
+        :style="{height: (rowHeight - 20) + 'px'}">
       </div>
     </Card>
 
-    <fft-modal></fft-modal>
+    <fft-modal
+      @cancel="cancel"
+      @error="error"
+      @success="success">
+    </fft-modal>
   </div>
 </template>
 
@@ -47,12 +52,24 @@
         return this.$store.getters.HasChart(this.filename,
           this.preProcess,
           this.methodName)
+      },
+      rowHeight: function () {
+        return this.$store.state.interfaceConfig.appHeight / 2 - 20
       }
     },
     methods: {
       runPreProcessMethod () {
         this.$store.commit('SetMethodConfigModalVisual',
           [this.preProcess, this.methodName, true])
+      },
+      cancel () {
+        this.buttonVisible = true
+      },
+      error (message) {
+        this.$Message.info(message)
+        this.buttonVisible = true
+      },
+      success () {
         this.buttonVisible = false
       }
     },

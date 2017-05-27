@@ -17,7 +17,8 @@
 
 <template>
   <div>
-    <Row type="flex" :gutter="16" style="height: 480px;">
+    <Row type="flex"
+         :gutter="16">
       <i-col span="12">
         <static-alignment-card>
         </static-alignment-card>
@@ -76,8 +77,8 @@ filename_processName_processMethod
       process: function () {
         return this.$store.getters.Process(this.preProcess)
       },
-      height: function () {
-        return 400
+      rowHeight: function () {
+        return this.$store.state.interfaceConfig.appHeight / 2
       },
       target: function () {
         try {
@@ -85,9 +86,6 @@ filename_processName_processMethod
         } catch (e) {
           dialog.showErrorBox('error', '内部错误')
         }
-      },
-      targetFilename: function () {
-        return this.$store.state.activeTabName
       }
     },
     methods: {

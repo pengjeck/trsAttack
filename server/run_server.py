@@ -11,9 +11,7 @@ app = Flask(__name__)
 @app.route("/preProcess/alignment/staticAlignment", methods=['POST'])
 def pre_process_alignment_static():
     argv_1 = request.get_json(force=True)
-    print(argv_1)
     p = subprocess.run(['bin/runStaticAlignment', argv_1], stdout=subprocess.PIPE)
-    print(p.stdout.decode())
     return jsonify(p.stdout.decode())
 
 
@@ -21,6 +19,8 @@ def pre_process_alignment_static():
 def pre_process_alignment_fft():
     argv_1 = request.get_json(force=True)
     p = subprocess.run(['bin/runFFT', argv_1], stdout=subprocess.PIPE)
+    if p.returncode != 0:
+        print(p.stdout.decode())
     return jsonify(p.stdout.decode())
 
 
@@ -28,6 +28,8 @@ def pre_process_alignment_fft():
 def pre_process_alignment_dtw():
     argv_1 = request.get_json(force=True)
     p = subprocess.run(['bin/runDTW', argv_1], stdout=subprocess.PIPE)
+    if p.returncode != 0:
+        print(p.stdout.decode())
     return jsonify(p.stdout.decode())
 
 

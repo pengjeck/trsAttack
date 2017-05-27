@@ -23,7 +23,8 @@ int main(int argc, char *argv[]){
   out_root["align"] = method_name;
   vector<vector<double> > traces;
   if(reader.parse(body, in_root)){
-    if(!Basic::checkParams(in_root, vector<string>{"originalPoints", "traces"})){
+    if(!Basic::checkParams(in_root, vector<string>{"originalPoints",
+                                                   "traces"})){
       out_root["traces"].append(Json::Value());
       out_root["message"].append("参数错误");
       cout << out_root.toStyledString() << endl;
@@ -31,7 +32,6 @@ int main(int argc, char *argv[]){
     }
 
     auto originalPoints = in_root["originalPoints"].asInt();
-
     traces = Basic::ReadTraces(in_root);
     auto iterator = traces.begin();
 

@@ -64,7 +64,7 @@
 
         <!-- -------------------------- 文件面板 -------------------------- -->
         <i-col span="24">
-          <file-tabs :style="{height: appHeight + 'px'}"></file-tabs>
+          <file-tabs :style="{height: Height + 'px'}"></file-tabs>
         </i-col>
 
         <!-- -------------------------- 版权信息 -------------------------- -->
@@ -87,6 +87,7 @@
   import chooseFile from './components/chooseFile.vue'
   import sidebar from './components/sidebar.vue'
   import fileTabs from './components/fileTabs.vue'
+
   // ------------import utils ----------------
   export default {
     components: {
@@ -97,8 +98,9 @@
     },
     methods: {},
     computed: {
-      appHeight () {
-        return this.$store.state.interfaceConfig.appMinHeight
+      Height () {
+        // 我也不知道为什么是120
+        return this.$store.state.interfaceConfig.appHeight
       }
     },
     created: function () {

@@ -1,8 +1,4 @@
 <style>
-  .chart {
-  min-height: 400px;
-  width: 100%;
-  }
 </style>
 
 <template>
@@ -10,7 +6,7 @@
     <Row>
       <i-col span="18">
         <div
-          class="chart"
+          style="min-height: 400px;"
           :id="target.filename + '_' + rowTrace + '_' + rowTrace">
         </div>
       </i-col>

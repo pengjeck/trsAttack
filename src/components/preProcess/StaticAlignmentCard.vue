@@ -3,25 +3,27 @@
 </style>
 
 <template>
-  <div>
-    <Card>
+  <div style="margin-bottom: 5px;">
+    <Card :style="{height: rowHeight + 'px'}">
       <div v-show="buttonVisible"
-        style="text-align:center;">
+           style="text-align:center;">
         <Button type="ghost"
                 icon="grid"
                 shape="circle"
                 size="large"
-                @click="runPreProcessMethod()">
+                @click="runPreProcessMethod">
           {{ methodName }}
         </Button>
       </div>
       <div
         :id="filename + '_' + preProcess + '_' + methodName"
-        class="chart">
+        class="chart"
+        :style="{height: (rowHeight - 20) + 'px'}">
       </div>
     </Card>
 
-    <static-alignment-modal></static-alignment-modal>
+    <static-alignment-modal
+      @cancel="cancel"></static-alignment-modal>
   </div>
 </template>
 
@@ -47,6 +49,9 @@
         return this.$store.getters.HasChart(this.filename,
           this.preProcess,
           this.methodName)
+      },
+      rowHeight: function () {
+        return this.$store.state.interfaceConfig.appHeight / 2 - 20
       }
     },
     methods: {
@@ -54,6 +59,9 @@
         this.$store.commit('SetMethodConfigModalVisual',
           [this.preProcess, this.methodName, true])
         this.buttonVisible = false
+      },
+      cancel () {
+        this.buttonVisible = true
       }
     },
     components: {

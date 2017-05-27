@@ -10,7 +10,8 @@ import actions from './actions'
 import targets from './modules/targets'
 import processes from './modules/processes'
 import TraceData from '../util/traceData'
-const interfaceConfig = require('./interfaceConfig.json')
+// const interfaceConfig = require('./interfaceConfig')
+import interfaceConfig from './interfaceConfig'
 Vue.use(Vuex)
 
 export default new Vuex.Store({

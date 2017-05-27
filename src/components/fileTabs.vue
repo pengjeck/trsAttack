@@ -1,19 +1,14 @@
 <style>
   .tab-pane-content {
-    height: 700px;
-    margin: 5px;
+    /*margin: 5px;*/
+    background: #f5f7f9;
     width: 100%;
     overflow: hidden;
-    background: #fff;
+    /*background: #fff;*/
   }
 
   .fill {
     height: 100%;
-    width: 100%;
-  }
-
-  .tab-main {
-    height: 400px;
     width: 100%;
   }
 </style>
@@ -22,6 +17,7 @@
   <div>
     <Tabs v-model="selectFileName"
           type="card"
+          style="margin-bottom: 0"
           closable
           @on-tab-remove="handleTabRemove">
       <Tab-pane
@@ -31,7 +27,8 @@
         :key="target['filename']"
         :label="target.GetShortFileName()"
         :name="target['filename']"
-        class="tab-pane-content">
+        class="tab-pane-content"
+        :style="{height: tabPanelHeight+'px'}">
         <!-- >>>>>>>>>>> 页面内容 <<<<<<<<<<<< -->
         <Carousel
           @on-change="handleCarouselChange"
@@ -101,11 +98,13 @@
       reportPanel
     },
     computed: {
+      tabPanelHeight () {
+        return this.$store.state.interfaceConfig.appHeight
+      },
       selectFileName () {
         return this.$store.state.activeTabName
       },
       targets () {
-//        console.log(this.$store.getters.AllTarget)
         return this.$store.getters.AllTarget
       },
       processIndex () {

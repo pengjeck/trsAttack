@@ -31,7 +31,7 @@ export function readHeader (path) {
       throw new MediaError('file do not exists')
     }
   })
-  var fd = fs.openSync(path, 'r')
+  let fd = fs.openSync(path, 'r')
   let traceData = new TraceData()
   traceData.filename = path
   let stopFlag = false
@@ -179,15 +179,19 @@ export function readHeader (path) {
  * @param titleSpaceLen
  * @param cryDataLen
  * @param sampleType
+ * @param begSampleIndex
+ * @param endSampleIndex
  * @param sampleDataLen
  * @returns {SingleTrace}
  */
-function readSingleTraceData (rawSingleTraceData, titleSpaceLen, cryDataLen,
-                              sampleType, sampleDataLen) {
+function readSingleTraceData (rawSingleTraceData,
+                              titleSpaceLen, cryDataLen,
+                              sampleType, sampleDataLen,
+                              begSampleIndex, endSampleIndex) {
   let singleTrace = new SingleTrace()
   singleTrace.traceTitle = rawSingleTraceData.slice(0, cryDataLen)
   singleTrace.cryData = rawSingleTraceData.slice(cryDataLen, titleSpaceLen)
-  let index = titleSpaceLen + cryDataLen
+  let index = titleSpaceLen + cryDataLen + sampleDataLen * begSampleIndex
   while (true) {
     /**
      * if is integer
@@ -226,7 +230,7 @@ function readSingleTraceData (rawSingleTraceData, titleSpaceLen, cryDataLen,
     }
     singleTrace.samples.push(out)
     index += sampleDataLen
-    if (index === rawSingleTraceData.length) {
+    if (index === titleSpaceLen + cryDataLen + sampleDataLen * endSampleIndex) {
       break
     }
   }
@@ -238,9 +242,12 @@ function readSingleTraceData (rawSingleTraceData, titleSpaceLen, cryDataLen,
  * @param traceData
  * @param begIndex
  * @param endIndex
+ * @param begSampleIndex
+ * @param endSampleIndex
  * @returns {*}
  */
-export function readMultiTrace (traceData, begIndex, endIndex) {
+export function readMultiTrace (traceData, begIndex, endIndex,
+                                begSampleIndex, endSampleIndex) {
   if (!(traceData instanceof TraceData)) {
     throw new TypeError('params header should be TraceData instanceof')
   }
@@ -263,7 +270,9 @@ export function readMultiTrace (traceData, begIndex, endIndex) {
       traceData.titleSpaceLen,
       traceData.cryDataLen,
       traceData.sampleType,
-      traceData.sampleDataLen)
+      traceData.sampleDataLen,
+      begSampleIndex,
+      endSampleIndex)
     singleTrace.traceIndex = i
     traceData.traces.push(singleTrace)
   }
