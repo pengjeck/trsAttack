@@ -2,7 +2,6 @@
  * Created by pj on 17-5-17.
  */
 
-
 let urlAddParam = (url, key, value) => {
   let splitChar = '?'
   if (url.indexOf('?') !== -1) {
@@ -22,3 +21,5 @@ let urlAddSubPath = (url, subPath) => {
   url += '/' + subPath
   return url
 }
+
+export { urlAddParam, urlAddSubPath }

@@ -1,0 +1,28 @@
+65
+Number of traces
+66
+Number of samples per trace
+67
+Sample Coding (see table)
+68
+Length of cryptographic data included in trace
+69
+Title space reserved per trace
+70
+Global trace title
+71
+Description
+72
+Offset in X-axis for trace representation
+73
+Label of X-axis
+74
+Label of Y-axis
+75
+Scale value for X-axis
+76
+Scale value for Y-axis
+77
+Trace offset for displaying trace numbers
+78
+Logarithmic scale

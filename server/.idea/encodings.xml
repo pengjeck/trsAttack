@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/Alignment/alignment_factory.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/alignment_method.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/complex.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/dtw.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/dtw.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/fft_method.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/fft_method.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/poc.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/poc.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/staticalignment_method.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Alignment/staticalignment_method.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Analysis/analysis_factory.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Analysis/analysis_method.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Analysis/cpa_method.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Analysis/cpa_method.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Analysis/dpa_method.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Analysis/dpa_method.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Kits/parameter.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Location/differential_method.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Location/differential_method.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Location/location_factory.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Location/location_method.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Location/nicv_method.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Location/nicv_method.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Middle/aes.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Middle/aes.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Middle/middle_method.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Middle/othersinput.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Middle/sms4.cpp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Middle/sms4.h" charset="GBK" />
+  </component>
+</project>

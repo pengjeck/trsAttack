@@ -36,6 +36,7 @@
   let request = require('request')
   import { HOST } from '../../util/localConfig'
   const {dialog} = require('electron').remote
+  import { urlAddSubPath } from '../../util/url'
   export default {
     components: {
       rowNumberInput
@@ -52,7 +53,7 @@
         return [this.target.sampleRange[0], this.target.sampleRange[1]]
       },
       targetTraceRange: function () {
-        return [this.target.traceRange[0], this.target.traceRange[1]]
+        return [this.target.traceRange[0], this.target.traceRange[1] - 1]
       },
       target: function () {
         try {
@@ -75,10 +76,17 @@
           referTrace: this.target.traces[this.$refs.referTraceIndex.getInputNumber() - this.target.traceRange[0]],
           traces: this.target.traces
         }
+        let url = urlAddSubPath(HOST, this.preProcess)
+        url = urlAddSubPath(url, 'alignment')
+        url = urlAddSubPath(url, this.methodName)
         let options = {
-          url: HOST,
-          method: 'POST',
-          form: data
+          url: url,
+//          method: 'POST',
+          json: true,
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify(data)
         }
         let upperThis = this
         request.post(options, function (error, response, body) {

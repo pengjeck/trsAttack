@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 3.6)
+project(proprocess)
+
+set(CMAKE_CXX_STANDARD 11)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+find_package(Pistache)
+
+
+# region
+include_directories("${Pistache_INCLUDE_DIRS}")
+include_directories(Alignment)
+include_directories(Analysis)
+include_directories(Assessment)
+include_directories(Decode)
+include_directories(Location)
+include_directories(Middle)
+include_directories(Kits)
+include_directories(server)
+
+add_subdirectory(Alignment)
+add_subdirectory(Location)
+add_subdirectory(Decode)
+add_subdirectory(Assessment)
+add_subdirectory(Analysis)
+add_subdirectory(Middle)
+add_subdirectory(Kits)
+
+# endregion
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(JSONCPP jsoncpp)
+link_libraries(${JSONCPP_LIBRARIES})
+message(${JSONCPP_LIBRARIES})
+
+file(GLOB LIBS "bin/*.so")
+file(GLOB SERVER_SRC "server/*.h" "server/*.cpp")
+add_executable(run_server run_server.cpp ${SERVER_SRC})
+target_link_libraries(run_server ${LIBS})
+target_link_libraries(run_server Qt5::Core)
+target_link_libraries(run_server ${Pistache_LIBRARIES})
+target_link_libraries(run_server ${JSONCPP_LIBRARIES})
+
+
+# region
+add_executable(run run.cpp)
+target_link_libraries(run ${LIBS})
+find_package(Qt5Core REQUIRED)
+TARGET_LINK_LIBRARIES(run Qt5::Core)
+# endregion
+
+add_executable(t_cpp test.cpp)

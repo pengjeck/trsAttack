@@ -1,0 +1,31 @@
+cmake_minimum_required(VERSION 2.8.3)
+
+#FIND_PACKAGE(PythonInterp)
+#FIND_PACKAGE(PythonLibs)
+#if (${PYTHON_VERSION_MAJOR} EQUAL 3)
+#    FIND_PACKAGE(Boost COMPONENTS python3)
+#else()
+#    FIND_PACKAGE(Boost COMPONENTS python)
+#endif()
+set(CMAKE_CXX_STANDARD 11)
+
+#ENABLE_TESTING()
+#INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
+#LINK_LIBRARIES(${Boost_LIBRARIES} ${PYTHON_LIBRARIES}) # Deprecated but so convenient!
+
+include_directories(Alignment)
+include_directories(Analysis)
+include_directories(Assessment)
+#include_directories(Decode)
+include_directories(Location)
+include_directories(Middle)
+include_directories(Kits)
+add_subdirectory(Alignment)
+add_subdirectory(Location)
+#add_subdirectory(Decode)
+add_subdirectory(Assessment)
+add_subdirectory(Analysis)
+add_subdirectory(Middle)
+add_subdirectory(Kits)
+
+#PYTHON_ADD_MODULE(hello hello.cpp)
