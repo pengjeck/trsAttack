@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
 set(CMAKE_CXX_STANDARD 11)
 
-file(GLOB ALIGNMENT_SRC "*.h" "*.cpp")
-
 find_package(Qt5Core REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP jsoncpp)

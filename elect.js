@@ -11,8 +11,8 @@ const fs = require('fs')
 
 let mainWindow = null
 
-const url = 'http://localhost:8080'
-// let url = 'file:///home/pj/pro/js/webapp/util/test.html'
+// const url = 'http://localhost:8080'
+let url = 'file:///home/pj/pro/js/trsapp/util/test.html'
 // let url = '/home/pj/pro/js/webapp/index.html'
 function createWindow () {
   mainWindow = new BrowserWindow({

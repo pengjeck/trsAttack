@@ -6,7 +6,7 @@ const request = require('request')
 // let data = {
 //   fizz: 'buzz'
 // }
-const sample_str_target = require('./sample_str_target')
+// const sample_str_target = require('./sample_str_target')
 let data1 = {
   Align: 'FFT',
   OriginalPoints: 8,
@@ -47,15 +47,33 @@ let data4 = {
   ]
 }
 
+let data5 = {
+  Points: 16,
+  Waves: 3,
+  addRoundKey: [
+    ['0123456789ABCDEF0123456789ABCDEF'],
+    ['FEDCBA9876543210FEDCBA9876543210'],
+    ['11111111111111111111111111111111']
+  ],
+  traces: [
+    [-1.3, 2.1, -3.4, 4.8, 5.0, -6.3, 7.2, -8.1, 3.0, 2.2, -5.5, -7.2, 3.8, 2.6, 5.9, -1.5],
+    [-3, 2, 3, 6, -5, 0, 4, -2, 6, -3, 2, 6, -3, 6, -3, -6],
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 0, 1, 2]
+  ]
+}
+
 let staticAlignmentUrl = 'http://localhost:5000/preProcess/alignment/StaticAlignment'
 let fftUrl = 'http://localhost:5000/preProcess/alignment/FFT'
 let dtwUrl = 'http://localhost:5000/preProcess/alignment/DTW'
 let pocUrl = 'http://localhost:5000/preProcess/alignment/POC'
+let dpaUrl = 'http://localhost:5000/attack/analysis/DPA'
+let cpaUrl = 'http://localhost:5000/attack/analysis/CPA'
+
 // console.log(JSON.stringify(data))
 // let url = 'http://httpbin.org/post'
 request.post({
-  url: staticAlignmentUrl,
-  json: JSON.stringify(sample_str_target)
+  url: cpaUrl,
+  json: JSON.stringify(data5)
   // data: JSON.stringify(data)
 }, function (error, response, body) {
   if (!error && response.statusCode === 200) {
