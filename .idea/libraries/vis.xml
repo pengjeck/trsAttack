@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="vis" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$USER_HOME$/scode/DefinitelyTyped/types/vis/index.d.ts" />
+        <item url="file://$USER_HOME$/scode/DefinitelyTyped/types/vis/vis-tests.ts" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$USER_HOME$/scode/DefinitelyTyped/types/vis/index.d.ts" />
+      <root url="file://$USER_HOME$/scode/DefinitelyTyped/types/vis/vis-tests.ts" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

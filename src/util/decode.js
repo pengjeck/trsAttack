@@ -189,8 +189,12 @@ function readSingleTraceData (rawSingleTraceData,
                               sampleType, sampleDataLen,
                               begSampleIndex, endSampleIndex) {
   let singleTrace = new SingleTrace()
-  singleTrace.traceTitle = rawSingleTraceData.slice(0, cryDataLen)
-  singleTrace.cryData = rawSingleTraceData.slice(cryDataLen, titleSpaceLen)
+  singleTrace.traceTitle = rawSingleTraceData.slice(0, titleSpaceLen).toString()
+  singleTrace.cryData = []
+  for (let i = 0; i < cryDataLen; i++) {
+    singleTrace.cryData.push(
+      rawSingleTraceData.slice(titleSpaceLen + i, titleSpaceLen + i + 1).readInt8(0))
+  }
   let index = titleSpaceLen + cryDataLen + sampleDataLen * begSampleIndex
   while (true) {
     /**

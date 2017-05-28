@@ -1,4 +1,4 @@
-const Plotly = require('./plotly-latest.min')
+const Plotly = require('../src/util/plotly-latest.min')
 
 Plotly.d3.json('https://raw.githubusercontent.com/plotly/datasets/master/3d-ribbon.json',
   function (figure) {

@@ -11,10 +11,14 @@
     :closable="false"
     :mask-closable="false"
     v-model="StaticAlignmentModalVisual"
-    :title="methodName + '配置'">
-    <row-number-input illustrate="点的个数"
+    title="StaticAlignment配置">
+    <row-number-input illustrate="原始点数"
                       :inputNumberRange="targetSampleRange"
                       ref="originalPoints">
+    </row-number-input>
+    <row-number-input illustrate="基准曲线"
+                      :inputNumberRange="targetTraceRange"
+                      ref="referTraceIndex">
     </row-number-input>
     <div slot="footer">
       <Button icon="close-round" @click="abolish">
@@ -30,27 +34,29 @@
 </template>
 
 <script>
-  import rowNumberInput from '../basic/rowNumberInput.vue'
-  import Button from '../../../node_modules/iview/src/components/button/button'
+  import rowNumberInput from '../../basic/rowNumberInput.vue'
   let request = require('request')
-  import { HOST } from '../../util/localConfig'
-  import { is2Exp } from '../../util/basic'
+  import { is2Exp } from '../../../util/basic'
+  import { HOST } from '../../../util/localConfig'
   const {dialog} = require('electron').remote
-  import { urlAddSubPath } from '../../util/url'
+  import { urlAddSubPath } from '../../../util/url'
   export default {
     components: {
-      Button,
       rowNumberInput
     },
     data () {
       return {
         preProcess: 'preProcess',
-        methodName: 'FFT'
+        methodName: 'POC'
       }
     },
     computed: {
       targetSampleRange: function () {
+        // 不是使用原来的数据，使用一个拷贝避免内部对数据进行修改
         return [this.target.sampleRange[0], this.target.sampleRange[1]]
+      },
+      targetTraceRange: function () {
+        return [this.target.traceRange[0], this.target.traceRange[1] - 1]
       },
       target: function () {
         try {
@@ -59,7 +65,7 @@
           dialog.showErrorBox('error', '内部错误')
         }
       },
-      // 查找这个配置内容是否可见
+      // 查找是否可见
       StaticAlignmentModalVisual: function () {
         return this.$store.getters.MethodConfigModalShow(this.preProcess, this.methodName)
       }
@@ -69,13 +75,14 @@
         try {
           let data = {
             originalPoints: this.$refs.originalPoints.getInputNumber(),
+            referTrace: this.target.traces[this.$refs.referTraceIndex.getInputNumber() - this.target.traceRange[0]].samples,
             traces: this.target.traces.map(trace => trace.samples)
           }
           if (!is2Exp(data.originalPoints)) {
-            // this.$emit('error', 'fft要求处理的点的个数为2^n')
-            this.$Message.info('fft要求处理的点的个数为2^n')
+            this.$Message.info('poc要求处理的点的个数为2^n')
             return
           }
+
           let url = urlAddSubPath(HOST, this.preProcess)
           url = urlAddSubPath(url, 'alignment')
           url = urlAddSubPath(url, this.methodName)
@@ -109,6 +116,8 @@
             })
         } catch (e) {
           this.$emit('error', e.message)
+          this.$store.commit('SetMethodConfigModalVisual',
+            [this.preProcess, this.methodName, false])
         }
       },
       abolish: function () {

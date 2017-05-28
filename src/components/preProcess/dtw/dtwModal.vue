@@ -25,12 +25,12 @@
 </template>
 
 <script>
-  import rowNumberInput from '../basic/rowNumberInput.vue'
-  import Button from '../../../node_modules/iview/src/components/button/button'
+  import rowNumberInput from '../../basic/rowNumberInput.vue'
+  import Button from '../../../../node_modules/iview/src/components/button/button'
   let request = require('request')
-  import { HOST } from '../../util/localConfig'
+  import { HOST } from '../../../util/localConfig'
   const {dialog} = require('electron').remote
-  import { urlAddSubPath } from '../../util/url'
+  import { urlAddSubPath } from '../../../util/url'
   export default {
     components: {
       Button,

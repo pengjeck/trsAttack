@@ -1,6 +1,6 @@
 function SingleTrace () {
   this.samples = []
-  this.cryData = ''
+  this.cryData = []
   this.traceTitle = ''
   this.traceIndex = ''
   this.sampleBegIndex = 0

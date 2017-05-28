@@ -11,8 +11,8 @@ const fs = require('fs')
 
 let mainWindow = null
 
-// const url = 'http://localhost:8080'
-let url = 'file:///home/pj/pro/js/trsapp/util/test.html'
+const url = 'http://localhost:8080'
+// let url = 'file:///home/pj/pro/js/trsapp/util/test.html'
 // let url = '/home/pj/pro/js/webapp/index.html'
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -62,47 +62,6 @@ function getProcessMethodPath (processName, methodName) {
   return app.getAppPath() + '/data' + '/' + processName + '/' + methodName
 }
 // >>>>>>>>>>>> ipc main >>>>>>>>>>>>
-
-ipcMain.on('testIpcRenderer', (event, args) => {
-  console.log(args)
-})
-
-ipcMain.on('chooseFileType', (event, args) => {
-  console.log('get')
-})
-
-/**
- * queryProcessData:查找数据
- *  找到则返回数据
- *  没找到则返回空数据
- */
-ipcMain.on('queryProcessData', (event, args) => {
-  let processName = args['processName']
-  let methodName = args['methodName']
-  let filename = args['filename']
-  let totalPath = getProcessDataPath(processName, methodName, filename)
-  if (fs.existsSync(totalPath)) {
-    event.returnValue = JSON.parse(fs.readFileSync(totalPath, 'utf8'))
-  } else {
-    event.returnValue = null
-  }
-})
-
-/**
- * saveProcessData：保存数据
- */
-ipcMain.on('saveProcessData', (event, args) => {
-  let processName = args['processName']
-  let methodName = args['methodName']
-  let filename = args['filename']
-  beforeSaveProcessData(processName, methodName)
-  let totalPath = getProcessMethodPath(processName, methodName)
-  let traces = args['traces'] // 传递过来的数据
-  if (fs.existsSync(totalPath)) {
-    filename = totalPath + '/' + filename
-    saveJson(traces, filename)
-  }
-})
 
 // <<<<<<<<<<<< ipc main end <<<<<<<<<<<<
 

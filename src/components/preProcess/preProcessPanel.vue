@@ -1,18 +1,4 @@
 <style>
-  .chart {
-    height: 100%;
-    width: 100%;
-  }
-
-  .chart-init {
-    height: 100%;
-    width: 100%;
-  }
-
-  .chart-loading {
-    height: 100%;
-    width: 100%;
-  }
 </style>
 
 <template>
@@ -45,10 +31,10 @@ filename_processName_processMethod
 <script>
   import Modal from '../../../node_modules/iview/src/components/modal/modal'
   // region >>>>>> import modals >>>>>>
-  import fftCard from './fftCard.vue'
-  import dtwCard from './dtwCard.vue'
-  import pocCard from './pocCard.vue'
-  import StaticAlignmentCard from './StaticAlignmentCard.vue'
+  import fftCard from './fft/fftCard.vue'
+  import dtwCard from './dtw/dtwCard.vue'
+  import pocCard from './poc/pocCard.vue'
+  import StaticAlignmentCard from './staticAlignment/StaticAlignmentCard.vue'
   const {dialog} = require('electron').remote
   import ICol from '../../../node_modules/iview/src/components/grid/col'
   // endregion <<<<<< import modals <<<<<<

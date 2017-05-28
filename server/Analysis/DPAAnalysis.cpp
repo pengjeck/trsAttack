@@ -47,14 +47,11 @@ int HammingWeight(unsigned int ui){
 Json::Value write3Dresult(const vector<vector<vector<double>>> &result){
   //result ought to be a    16 * 256 * Points  3D vector
   Json::Value ret;
-  cout << result.size() << "X" << result[0].size() << "X" << result[0][0].size() << endl;
-
   for(int i = 0; i < result.size(); i++){
     Json::Value singleChar;
     for(int j = 0; j < result[i].size(); j++){
       Json::Value D2result;
       for(int k = 0; k < result[i][j].size(); k++){
-        cout << "every single diff: " << result[i][j][k] << endl;
         D2result.append(result[i][j][k]);
       }
       singleChar.append(D2result);
@@ -90,11 +87,11 @@ int main(int argc, char *argv[]){
   Json::Value in_root;
   Json::Value out_root;
 
-  out_root["Analysis"] = method_name;
+  out_root["analysis"] = method_name;
   vector<vector<double >> traces;
   if(reader.parse(body, in_root)){
-    if(!Basic::checkParams(in_root, vector<string>{"Points",
-                                                   "Waves",
+    if(!Basic::checkParams(in_root, vector<string>{"points",
+                                                   "waves",
                                                    "addRoundKey",
                                                    "traces"})){
       out_root["traces"].append(Json::Value());
@@ -103,16 +100,14 @@ int main(int argc, char *argv[]){
       return 1;
     }
 
-    auto points = in_root["Points"].asInt();
+    auto points = in_root["points"].asInt();
     //int points = 8;
-    auto Waves = in_root["Waves"].asInt();
+    auto Waves = in_root["waves"].asInt();
     //int Waves = 1;
 
     Parameter *p = new Parameter();
     p->Analysis_method = QString::fromStdString(method_name);
-    cout << "analysis_method: " << method_name << endl;
     p->Points = points;
-    cout << "points: " << p->Points << endl;
     p->NumofSBox = 16; //
     p->SBoxLength = 256; // AES-128 : 16 * 8bit
 
@@ -123,28 +118,29 @@ int main(int argc, char *argv[]){
 
     vector<vector<vector<double> > > resultcontainer;
     for(int i = 0; i < Waves; i++){
-      string clearT = in_root["addRoundKey"][0][i].asString();
+      //string clearT = in_root["addRoundKey"][0][i].asString();
+      vector<int> clearT;
+      for(int index = 0; index < in_root["addRoundKey"][i].size(); index++)
+        clearT.push_back(in_root["addRoundKey"][i][index].asInt());
       vector<double> power;
       for(int x = 0; x < in_root["traces"][i].size(); x++){
         power.push_back(in_root["traces"][i][x].asDouble());
       }
       for(int j = 0; j < p->NumofSBox; j++){
-        unsigned char ct1 = (unsigned char) (clearT[2 * j]);
-        unsigned char ct2 = (unsigned char) (clearT[2 * j + 1]);
-        if(ct1 < 58) ct1 -= 48;
-        else ct1 -= 55;
-        if(ct2 < 58) ct2 -= 48;
-        else ct2 -= 55;
+        unsigned char ct1 = (unsigned char) (clearT[j]);
+        //unsigned char ct2 = (unsigned char) (clearT[2 * j + 1]);
+        //if(ct1 < 58) ct1 -= 48;
+        // ct1 -= 55;
+        //if(ct2 < 58) ct2 -= 48;
+        //else ct2 -= 55;
 
-        unsigned char ct = 16 * ct1 + ct2;
+        //unsigned char ct = 16 * ct1 + ct2;
+        unsigned char ct = ct1;
         vector<int> middle = middle_wrapper(ct);
         resultcontainer = method.Analyse(middle, power, j);
       }
     }
-
     singleWaveResult = write3Dresult(resultcontainer);
-
-    cout << "write success." << endl;
     out_root["result"].append(singleWaveResult);
     singleWaveResult.clear();
     cout << out_root.toStyledString() << endl;

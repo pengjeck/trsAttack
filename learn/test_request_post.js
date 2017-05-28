@@ -48,12 +48,12 @@ let data4 = {
 }
 
 let data5 = {
-  Points: 16,
-  Waves: 3,
+  points: 16,
+  waves: 3,
   addRoundKey: [
-    ['0123456789ABCDEF0123456789ABCDEF'],
-    ['FEDCBA9876543210FEDCBA9876543210'],
-    ['11111111111111111111111111111111']
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+    [22, 3, 4, 5, 53, 76, 245, 132, 44, 55, 66, 77, 3, 5, 66, 7],
+    [16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
   ],
   traces: [
     [-1.3, 2.1, -3.4, 4.8, 5.0, -6.3, 7.2, -8.1, 3.0, 2.2, -5.5, -7.2, 3.8, 2.6, 5.9, -1.5],
@@ -72,7 +72,7 @@ let cpaUrl = 'http://localhost:5000/attack/analysis/CPA'
 // console.log(JSON.stringify(data))
 // let url = 'http://httpbin.org/post'
 request.post({
-  url: cpaUrl,
+  url: dpaUrl,
   json: JSON.stringify(data5)
   // data: JSON.stringify(data)
 }, function (error, response, body) {

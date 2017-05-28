@@ -12,17 +12,9 @@
     :mask-closable="false"
     v-model="StaticAlignmentModalVisual"
     title="StaticAlignment配置">
-    <row-number-input illustrate="偏移量"
+    <row-number-input illustrate="原始点数"
                       :inputNumberRange="targetSampleRange"
-                      ref="rangeOffset">
-    </row-number-input>
-    <row-number-input illustrate="起始点"
-                      :inputNumberRange="targetSampleRange"
-                      ref="startPoint">
-    </row-number-input>
-    <row-number-input illustrate="总点数"
-                      :inputNumberRange="targetSampleRange"
-                      ref="totalPoints">
+                      ref="originalPoints">
     </row-number-input>
     <row-number-input illustrate="基准曲线"
                       :inputNumberRange="targetTraceRange"
@@ -42,11 +34,12 @@
 </template>
 
 <script>
-  import rowNumberInput from '../basic/rowNumberInput.vue'
+  import rowNumberInput from '../../basic/rowNumberInput.vue'
   let request = require('request')
-  import { HOST } from '../../util/localConfig'
+  import { is2Exp } from '../../../util/basic'
+  import { HOST } from '../../../util/localConfig'
   const {dialog} = require('electron').remote
-  import { urlAddSubPath } from '../../util/url'
+  import { urlAddSubPath } from '../../../util/url'
   export default {
     components: {
       rowNumberInput
@@ -54,7 +47,7 @@
     data () {
       return {
         preProcess: 'preProcess',
-        methodName: 'staticAlignment'
+        methodName: 'POC'
       }
     },
     computed: {
@@ -81,12 +74,16 @@
       confirm: function () {
         try {
           let data = {
-            rangeOffset: this.$refs.rangeOffset.getInputNumber(),
-            startPoint: this.$refs.startPoint.getInputNumber(),
-            totalPoints: this.$refs.totalPoints.getInputNumber(),
-            referTrace: this.target.traces[this.$refs.referTraceIndex.getInputNumber() - this.target.traceRange[0]].samples,
+            points: this.$refs.originalPoints.getInputNumber(),
+            waves: this.target.traces.length,
+            addRoundKey: this.target.traces.cryData,
             traces: this.target.traces.map(trace => trace.samples)
           }
+          if (!is2Exp(data.originalPoints)) {
+            this.$Message.info('poc要求处理的点的个数为2^n')
+            return
+          }
+
           let url = urlAddSubPath(HOST, this.preProcess)
           url = urlAddSubPath(url, 'alignment')
           url = urlAddSubPath(url, this.methodName)
@@ -110,6 +107,7 @@
                 ])
                 upperThis.$store.commit('SetMethodConfigModalVisual',
                   [upperThis.preProcess, upperThis.methodName, false])
+                upperThis.$emit('success')
               } else {
                 upperThis.$emit('error',
                   '网络|服务器内部错误\n' + error + '\n' + response.statusCode)

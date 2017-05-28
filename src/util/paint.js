@@ -1,6 +1,7 @@
 /**
  * Created by pj on 17-4-18.
  */
+import vis from 'vis'
 
 /**
  * 只绘制曲线
@@ -163,4 +164,52 @@ function paintTraces (myChart, traces, labelX, labelY, scaleX, scaleY, globalTit
   })
 }
 
-export {paintLines, paintTraces}
+/**
+ * 画彩带
+ * @param myChart
+ * @param ribbons: 二维数组
+ * @param labelX
+ * @param labelY
+ * @param labelZ
+ * @param globalTitle
+ */
+function paintRibbons (myChart, ribbons,
+                       labelX = 'x', labelY = 'y', labelZ = 'z',
+                       globalTitle = '') {
+  let ribbonsNum = 1
+  try {
+    ribbonsNum = ribbons.length
+  } catch (e) {
+    throw new RangeError('param ribbon should be 2 dim array')
+  }
+
+  if (ribbonsNum === 0) {
+    throw new RangeError('ribbon num should > 1')
+  }
+  let ySum = ribbons[0].length
+
+  let data = new vis.DataSet()
+  // create some nice looking data with sin/cos
+  let counter = 0
+  for (let x = 0; x < ribbonsNum; x += 1) {
+    for (let y = 0; y < ySum; y += 1) {
+      let value = ribbons[x][y]
+      data.add({id: counter++, x: x, y: y, z: value, style: value})
+    }
+  }
+
+  // specify options
+  let options = {
+    width: myChart.clientWidth + 'px',
+    height: myChart.clientHeight + 'px',
+    style: 'surface',
+    showPerspective: true,
+    showGrid: true,
+    showShadow: false,
+    keepAspectRatio: true,
+    verticalRatio: 0.5
+  }
+  /* eslint-disable no-new */
+  new vis.Graph3d(myChart, data, options)
+}
+export { paintLines, paintTraces, paintRibbons }
