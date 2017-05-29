@@ -3,7 +3,7 @@
  */
 
 import echarts from 'echarts'
-import {paintLines, paintTraces} from '../../util/paint'
+import { paintLines, paintTraces, paintRibbons } from '../../util/paint'
 // import Json2SingleTraces from '../../util/singleTrace'
 // const {dialog} = require('electron').remote
 // electron about
@@ -215,6 +215,20 @@ export default {
           '', '',  // labelx, labely
           1, 1, // scalex, scaley
           methodName)
+      } catch (e) {
+        throw e
+      }
+    },
+    PaintRibbon (state, params) {
+      let filename = params[0]
+      let processName = params[1]
+      let methodName = params[2]
+      let lines = params[3]
+      try {
+        let div = document.getElementById(
+          filename + '_' + processName + '_' + methodName
+        )
+        paintRibbons(div, lines)
       } catch (e) {
         throw e
       }

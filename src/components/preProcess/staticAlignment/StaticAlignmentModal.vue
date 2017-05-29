@@ -43,7 +43,7 @@
   const {dialog} = require('electron').remote
   import { urlAddSubPath } from '../../../util/url'
   import hash from 'object-hash'
-  import  { queryProcessData, saveProcessData } from '../../../util/opFile'
+  import { queryProcessData, saveProcessData } from '../../../util/opFile'
   export default {
     components: {
       rowNumberInput
@@ -69,6 +69,10 @@
           dialog.showErrorBox('error', '内部错误')
         }
       },
+      // 长文件名的hash值
+      filenameHash: function () {
+        return hash(this.$store.state.activeTabName)
+      },
       // 查找是否可见
       StaticAlignmentModalVisual: function () {
         return this.$store.getters.MethodConfigModalShow(this.preProcess, this.methodName)
@@ -85,10 +89,20 @@
             traces: this.target.traces.map(trace => trace.samples)
           }
           let filename = hash(data)
-          if (queryProcessData(this.preProcess,
-              this.methodName, filename) === null) {
-            // 如果没有找到经过该项处理的文件
-            // TODO：经过处理之后的文件。
+          let content = queryProcessData(this.preProcess,
+            this.methodName,
+            this.filenameHash,
+            filename)
+          if (content !== null) {
+            // 如果找到经过该项处理的文件
+            this.$store.commit('PaintLines', [
+              this.target.filename,
+              this.preProcess,
+              this.methodName,
+              content.traces
+            ]) // 画图
+            this.$store.commit('SetMethodConfigModalVisual',
+              [this.preProcess, this.methodName, false])
           } else {
             let url = urlAddSubPath(HOST, this.preProcess)
             url = urlAddSubPath(url, 'alignment')
@@ -111,7 +125,21 @@
                     upperThis.methodName,
                     content.traces
                   ])
-
+                  // 写入key5
+                  content.keys = upperThis.target.traces.map(trace => trace.cryData)
+                  // 存的返回的数据：用于下一次的查询
+                  saveProcessData(upperThis.preProcess,
+                    upperThis.methodName,
+                    upperThis.filenameHash,
+                    filename,
+                    content)
+                  // 存储返回的数据，用于攻击
+                  saveProcessData(upperThis.preProcess,
+                    upperThis.methodName,
+                    upperThis.filenameHash,
+                    upperThis.$store.state.interfaceConfig.recentFilename,
+                    content
+                  )
                   upperThis.$store.commit('SetMethodConfigModalVisual',
                     [upperThis.preProcess, upperThis.methodName, false])
                 } else {

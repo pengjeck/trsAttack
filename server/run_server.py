@@ -12,6 +12,8 @@ app = Flask(__name__)
 def pre_process_alignment_static():
     argv_1 = request.get_json(force=True)
     p = subprocess.run(['bin/runStaticAlignment', argv_1], stdout=subprocess.PIPE)
+    if p.returncode != 0:
+        print(p.stdout.decode())
     return jsonify(p.stdout.decode())
 
 
@@ -37,6 +39,8 @@ def pre_process_alignment_dtw():
 def pre_process_alignment_poc():
     argv_1 = request.get_json(force=True)
     p = subprocess.run(['bin/runPOC', argv_1], stdout=subprocess.PIPE)
+    if p.returncode != 0:
+        print(p.stdout.decode())
     return jsonify(p.stdout.decode())
 
 

@@ -15,7 +15,6 @@
         <mia-card></mia-card>
       </i-col>
     </Row>
-
   </div>
 </template>
 

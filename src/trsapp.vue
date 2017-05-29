@@ -99,7 +99,6 @@
     methods: {},
     computed: {
       Height () {
-        // 我也不知道为什么是120
         return this.$store.state.interfaceConfig.appHeight
       }
     },

@@ -63,12 +63,12 @@ export default class TraceData {
      * x轴一单元的尺度
      * @type {number}
      */
-    this.scaleX = 0.0
+    this.scaleX = 1.0
     /**
      * y轴一单元的尺度
      * @type {number}
      */
-    this.scaleY = 0.0
+    this.scaleY = 1.0
     /**
      * x的偏移
      * @type {number}
@@ -132,11 +132,12 @@ export default class TraceData {
     if (traceRange[1] - traceRange[0] !== traces.length) {
       throw new EvalError('traceRange div should equal to traces.length')
     }
-    for (let trace in traces) {
-      if (trace.length !== sampleRange[1] - sampleRange[0]) {
-        throw new EvalError('sampleRange div should equal to trace.length')
-      }
-    }
+    // 这段代码是错误的
+    // for (let trace in traces) {
+    //   if (trace.length !== sampleRange[1] - sampleRange[0]) {
+    //     throw new EvalError('sampleRange div should equal to trace.length')
+    //   }
+    // }
     // check over
     this.filename = filename
     this.traceNum = traceNum

@@ -77,8 +77,9 @@
   import InputNumber from '../../node_modules/iview/src/components/input-number/input-number'
   import Row from '../../node_modules/iview/src/components/grid/row'
   import ICol from '../../node_modules/iview/src/components/grid/col'
-
+  const fs = require('fs')
   import TraceData from '../util/traceData'
+  import SingleTrace from '../util/singleTrace'
   import { readMultiTrace } from '../util/decode'
   export default {
     components: {
@@ -112,23 +113,59 @@
         this.$store.state.selectModalVisual = false
       },
       selectConfirm () {
-        let target = readMultiTrace(this.$store.state.selectedTarget,
-          this.traceRange[0],
-          this.traceRange[1],
-          this.sampleRange[0],
-          this.sampleRange[1])
-        target.traceRange = this.traceRange
-        target.sampleRange = this.sampleRange
-        target.show = true
-        this.$store.state.activeTabName = target.filename
-        this.$store.commit('PushTarget', target) // 提交，插入新的数据
-        this.$nextTick(function () {
-          this.$store.commit('PaintTarget', [
-            'rowTrace', 'rowTrace', target
-          ])
-        })
-        this.$store.state.selectedTarget = new TraceData()
-        this.$store.state.selectModalVisual = false
+        if (this.selectedTarget.GetShortFileName().split('.')[1] === 'txt') {
+          // txt 文件
+          let samples = fs.readFileSync(this.selectedTarget.filename, 'utf-8')
+            .split('\n').map(line => {
+              return line.split(' ').slice(this.sampleRange[0], this.sampleRange[1])
+            })
+          let roundKeys = fs.readFileSync(this.selectedTarget.roundKeyFilename, 'utf-8')
+            .split('\n').map(line => {
+              return line.split(' ')
+            })
+          let traces = [] // array<singleTarget>
+          for (let i = 0; i < 2; i++) {
+            let trace = new SingleTrace(samples[i].map(item => {
+              return parseInt(item)
+            }))
+            trace.cryData = roundKeys[i].map(byte => parseInt('0x' + byte))
+            trace.traceIndex = i
+            traces.push(trace)
+          }
+          let target = this.$store.state.selectedTarget
+          target.traces = traces
+          target.traceRange = this.traceRange
+          target.sampleRange = this.sampleRange
+          target.show = true
+          this.$store.state.activeTabName = target.filename
+          this.$store.commit('PushTarget', target) // 提交，插入新的数据
+          this.$nextTick(function () {
+            this.$store.commit('PaintTarget', [
+              'rowTrace', 'rowTrace', target
+            ])
+          })
+          this.$store.state.selectedTarget = new TraceData()
+          this.$store.state.selectModalVisual = false
+        } else {
+          // trs 文件
+          let target = readMultiTrace(this.$store.state.selectedTarget,
+            this.traceRange[0],
+            this.traceRange[1],
+            this.sampleRange[0],
+            this.sampleRange[1])
+          target.traceRange = this.traceRange
+          target.sampleRange = this.sampleRange
+          target.show = true
+          this.$store.state.activeTabName = target.filename
+          this.$store.commit('PushTarget', target) // 提交，插入新的数据
+          this.$nextTick(function () {
+            this.$store.commit('PaintTarget', [
+              'rowTrace', 'rowTrace', target
+            ])
+          })
+          this.$store.state.selectedTarget = new TraceData()
+          this.$store.state.selectModalVisual = false
+        }
       }
     }
   }

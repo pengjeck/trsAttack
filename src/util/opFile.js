@@ -46,28 +46,42 @@ function createDir (dir) {
   }
 }
 
-function beforeSaveProcessData (processName, methodName) {
+function beforeSaveProcessData (processName, methodName, originFilename) {
   createDir('data')
   createDir('data/' + processName)
   createDir('data/' + processName + '/' + methodName)
+  createDir('data/' + processName + '/' + methodName + '/' + originFilename)
 }
 
-function getProcessDataPath (processName, methodName, filename) {
-  return app.getAppPath() + '/data' + '/' + processName + '/' + methodName + '/' + filename
+function getProcessDataPath (processName, methodName, originFilename, filename) {
+  return app.getAppPath() +
+    '/data' + '/' +
+    processName + '/' +
+    methodName + '/' +
+    originFilename + '/' +
+    filename
 }
 
-function getProcessMethodPath (processName, methodName) {
-  return app.getAppPath() + '/data' + '/' + processName + '/' + methodName
+function getProcessMethodPath (processName, methodName, originFilename) {
+  return app.getAppPath() +
+    '/data' + '/' +
+    processName + '/' +
+    methodName + '/' +
+    originFilename
 }
 
 /**
  * 查找文件
  * @param processName
+ * @param originFilename
  * @param methodName
  * @param filename
  */
-function queryProcessData (processName, methodName, filename) {
-  let totalPath = getProcessDataPath(processName, methodName, filename)
+function queryProcessData (processName, methodName, originFilename, filename) {
+  let totalPath = getProcessDataPath(processName,
+    methodName,
+    originFilename,
+    filename)
   if (fs.existsSync(totalPath)) {
     return JSON.parse(fs.readFileSync(totalPath, 'utf8'))
   } else {
@@ -79,11 +93,12 @@ function queryProcessData (processName, methodName, filename) {
  * @param processName
  * @param methodName
  * @param filename
+ * @param originFilename
  * @param data
  */
-function saveProcessData (processName, methodName, filename, data) {
-  beforeSaveProcessData(processName, methodName)
-  let totalPath = getProcessMethodPath(processName, methodName)
+function saveProcessData (processName, methodName, originFilename, filename, data) {
+  beforeSaveProcessData(processName, methodName, originFilename)
+  let totalPath = getProcessMethodPath(processName, methodName, originFilename)
   if (fs.existsSync(totalPath)) {
     filename = totalPath + '/' + filename
     saveJson(data, filename)
@@ -92,4 +107,15 @@ function saveProcessData (processName, methodName, filename, data) {
   }
 }
 
-export { calMD5, queryProcessData, saveProcessData }
+/**
+ * 删除文件
+ * @param processName
+ * @param methodName
+ * @param originFilename
+ * @param filename
+ */
+function deleteFile (processName, methodName, originFilename, filename) {
+  let totalPath = getProcessDataPath(processName, methodName, originFilename, filename)
+  fs.unlinkSync(totalPath)
+}
+export { calMD5, queryProcessData, saveProcessData, deleteFile }

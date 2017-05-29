@@ -173,9 +173,7 @@ function paintTraces (myChart, traces, labelX, labelY, scaleX, scaleY, globalTit
  * @param labelZ
  * @param globalTitle
  */
-function paintRibbons (myChart, ribbons,
-                       labelX = 'x', labelY = 'y', labelZ = 'z',
-                       globalTitle = '') {
+function paintRibbons (myChart, ribbons) {
   let ribbonsNum = 1
   try {
     ribbonsNum = ribbons.length
