@@ -29,9 +29,10 @@
     </cpa-modal>
     <template v-if="showModalVisible">
       <cpa-show-modal
-        :visible="true"
+        :visible="showModalVisible"
         :content="showContent"
-        :filename="filename">
+        :filename="filename"
+        @shutdown="cpaShowModalShutdown">
       </cpa-show-modal>
     </template>
   </div>
@@ -73,17 +74,35 @@
         this.buttonVisible = true
       },
       error (message) {
-        this.$Message.info(message)
+        this.$Message.error(message)
+        console.log(message)
         this.$store.commit('SetMethodConfigModalVisual',
           [this.attack, this.methodName, false]) // 关闭配置窗口
         this.buttonVisible = true
       },
-      success (content) {
+      success (params) {
+        let content = params[0]
+        console.log(content)
         this.buttonVisible = false
         this.$store.commit('SetMethodConfigModalVisual',
           [this.attack, this.methodName, false]) // 关闭配置窗口
         this.showContent = content
         this.showModalVisible = true
+        let upperThis = this
+        this.$nextTick(function () {
+          content.result[0].map((item, index) => {
+            let container = document.getElementById(
+              upperThis.filename + '_' + upperThis.attack + '_' + upperThis.methodName + '_' + index
+            )
+            this.$store.commit('PaintRibbon', [
+              container,
+              item
+            ])
+          })
+        })
+      },
+      cpaShowModalShutdown () {
+        this.showModalVisible = false
       }
     },
     components: {

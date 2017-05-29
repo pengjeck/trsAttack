@@ -82,7 +82,7 @@ vector<int> middle_wrapper(const unsigned char ct){
 
 int main(int argc, char *argv[]){
   string body = string(argv[1]);
-  string method_name = "DPA";
+  string method_name = "CPA";
   Json::Reader reader;
 
   Json::Value in_root;

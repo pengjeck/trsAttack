@@ -98,7 +98,8 @@
             saveProcessData(this.preProcess,
               this.methodName,
               this.filenameHash,
-              this.$store.state.interfaceConfig.recentFilename)
+              this.$store.state.interfaceConfig.recentFilename,
+              content)
             // 如果找到经过该项处理的文件
             this.$store.commit('PaintLines', [
               this.target.filename,

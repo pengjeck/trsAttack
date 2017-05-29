@@ -220,15 +220,10 @@ export default {
       }
     },
     PaintRibbon (state, params) {
-      let filename = params[0]
-      let processName = params[1]
-      let methodName = params[2]
-      let lines = params[3]
+      let container = params[0] // 容器
+      let lines = params[1]
       try {
-        let div = document.getElementById(
-          filename + '_' + processName + '_' + methodName
-        )
-        paintRibbons(div, lines)
+        paintRibbons(container, lines)
       } catch (e) {
         throw e
       }

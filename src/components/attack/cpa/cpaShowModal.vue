@@ -14,7 +14,7 @@
     title="CPA处理结果">
     <Row type="flex">
       <i-col span="8"
-             v-for="(item, index) in content.result"
+             v-for="(item, index) in content.result[0]"
              :key="index">
         <Card :style="{height: rowHeight + 'px'}">
           <div
@@ -26,13 +26,8 @@
     </Row>
 
     <div slot="footer">
-      <Button icon="close-round" @click="abolish">
+      <Button icon="close-round" @click="shutdown">
         <span>关闭</span>
-      </Button>
-      <Button type="primary"
-              icon="checkmark-round"
-              @click="close">
-        <span>确认</span>
       </Button>
     </div>
   </Modal>
@@ -68,11 +63,12 @@
         return this.$store.state.interfaceConfig.appHeight / 2 - 20
       },
       modalWidth: function () {
-        return electron.screen.getPrimaryDisplay().size.width
+        return electron.screen.getPrimaryDisplay().size.width - 120
       }
     },
     methods: {
-      close: function () {
+      shutdown: function () {
+        this.$emit('shutdown')
       }
     }
   }

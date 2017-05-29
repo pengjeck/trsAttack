@@ -111,6 +111,12 @@
             recentFilename)
           if (content !== null) {
             // 如果如果之前已经进行过该项的预处理攻击
+            // 更新最近的文件
+            saveProcessData(this.attack,
+              this.methodName,
+              this.filenameHash,
+              recentFilename,
+              content)
             console.log('已经对相同的数据进行过相同的攻击尝试\n' +
               this.methodName +
               '|' + this.filenameHash +
@@ -149,6 +155,12 @@
                     upperThis.filenameHash,
                     hash(data),
                     attackedContent)
+                  // 更新最近的文件
+                  saveProcessData(upperThis.attack,
+                    upperThis.methodName,
+                    upperThis.filenameHash,
+                    recentFilename,
+                    attackedContent)
                   upperThis.$emit('success', [
                     attackedContent
                   ])
@@ -156,7 +168,7 @@
                   upperThis.$emit('error',
                     '网络|服务器内部错误\n' + error + '\n' + response.statusCode)
                   upperThis.$store.commit('SetMethodConfigModalVisual',
-                    [upperThis.preProcess, upperThis.methodName, false])
+                    [upperThis.attack, upperThis.methodName, false])
                 }
               })
             } else {
@@ -171,12 +183,12 @@
         } catch (e) {
           this.$emit('error', e.message)
           this.$store.commit('SetMethodConfigModalVisual',
-            [this.preProcess, this.methodName, false])
+            [this.attack, this.methodName, false])
         }
       },
       abolish: function () {
         this.$store.commit('SetMethodConfigModalVisual',
-          [this.preProcess, this.methodName, false])
+          [this.attack, this.methodName, false])
         this.$emit('cancel')
       }
     }
