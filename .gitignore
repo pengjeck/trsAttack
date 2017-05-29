@@ -17,3 +17,6 @@ data/sample/
 data/preProcess/
 data/attack/
 data/assess/
+
+# the webstorm config file
+.idea/
