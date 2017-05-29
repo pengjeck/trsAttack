@@ -1,21 +1,24 @@
-# webapp
+# desktop app with electron\vue\vuex
 
-> A Vue.js project
+> A desktop app 
 
 ## Build Setup
 
 ``` bash
-# install dependencies
+### install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+### serve with hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
+### run app(after server started)
+> you should install electron before
+> $npm install electron -g
+cd project_path
+electron .
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## After
+if you have any problem, I'd like share my experience with you.
+
+this is my email: 1823403153@qq.com
