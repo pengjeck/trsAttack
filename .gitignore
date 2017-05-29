@@ -9,3 +9,11 @@ nohup.out
 
 server/bin/
 server/cmake-build-debug
+
+# the sample data; which is too large
+data/sample/
+
+# local file for convient with different algorithem 
+data/preProcess/
+data/attack/
+data/assess/
