@@ -104,32 +104,34 @@
       confirm: function () {
         try {
           let recentFilename = this.$store.state.interfaceConfig.recentFilename
-          let content = queryProcessData(this.preProcess,
+          // 找是不是有已经攻击过的数据？
+          let content = queryProcessData(this.attack,
             this.methodName,
             this.filenameHash,
-            recentFilename)   // 获取到相应的文件
+            recentFilename)
           if (content !== null) {
-            // 如果找到经过该项处理的文件, 开始执行攻击方法
-            // content就是经过预处理之后的文件
-            let data = {
-              points: content.traces[0].length,
-              waves: content.traces.length,
-              addRoundKey: content.keys,
-              traces: content.traces
-            }
-            let attackedFilename = hash(data)
-            let attackedContent = queryProcessData(this.attack,
-              this.methodName,
+            // 如果如果之前已经进行过该项的预处理攻击
+            console.log('已经对相同的数据进行过相同的攻击尝试\n' +
+              this.methodName +
+              '|' + this.filenameHash +
+              '|' + recentFilename)
+            // 有数据直接绘图不就好了
+            this.$emit('success', [
+              content
+            ]) // 预处理成功
+          } else {
+            // 找找有没有相应的预处理数据
+            let preProcessContent = queryProcessData(this.preProcess,
+              this.preProcessMethodName,
               this.filenameHash,
-              attackedFilename)
-            if (attackedContent !== null) {
-              this.$emit('success', [
-                this.filename,
-                this.attack,
-                this.methodName,
-                attackedContent
-              ]) // 发送给主进程
-            } else {
+              recentFilename)
+            if (preProcessContent !== null) {
+              let data = {
+                points: preProcessContent.traces[0].length,
+                waves: preProcessContent.traces.length,
+                addRoundKey: preProcessContent.keys,
+                traces: preProcessContent.traces
+              }
               let url = urlAddSubPath(HOST, this.attack)
               url = urlAddSubPath(url, 'analysis')
               url = urlAddSubPath(url, this.methodName)
@@ -148,9 +150,6 @@
                     hash(data),
                     attackedContent)
                   upperThis.$emit('success', [
-//                    upperThis.filename,
-//                    upperThis.attack,
-//                    upperThis.methodName,
                     attackedContent
                   ])
                 } else {
@@ -160,12 +159,14 @@
                     [upperThis.preProcess, upperThis.methodName, false])
                 }
               })
-              this.$store.commit('SetMethodConfigModalVisual',
-                [this.preProcess, this.methodName, false])
+            } else {
+              console.log('没有找到最近执行的预处理方法文件\n' +
+                this.preProcess + '|' +
+                this.preProcessMethodName + '|' +
+                this.filenameHash + '|' +
+                recentFilename)
+              this.$Message.info('请执行预处理操作:' + this.preProcessMethodName)
             }
-          } else {
-            // 没有找到相应的文件，说明在此前没有执行相应的操作
-            this.$Message.info('请执行预处理操作:' + this.preProcessMethodName)
           }
         } catch (e) {
           this.$emit('error', e.message)

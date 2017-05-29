@@ -44,7 +44,7 @@
     data () {
       return {
         attack: 'attack',
-        methodName: 'DPA',
+        methodName: 'CPA',
         showModalVisible: false,
         buttonVisible: true,
         showContent: null // 不知道会不会出问题
@@ -74,6 +74,8 @@
       },
       error (message) {
         this.$Message.info(message)
+        this.$store.commit('SetMethodConfigModalVisual',
+          [this.attack, this.methodName, false]) // 关闭配置窗口
         this.buttonVisible = true
       },
       success (content) {

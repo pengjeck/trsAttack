@@ -94,6 +94,11 @@
             this.filenameHash,
             filename)
           if (content !== null) {
+            // 存储新的文件
+            saveProcessData(this.preProcess,
+              this.methodName,
+              this.filenameHash,
+              this.$store.state.interfaceConfig.recentFilename)
             // 如果找到经过该项处理的文件
             this.$store.commit('PaintLines', [
               this.target.filename,
